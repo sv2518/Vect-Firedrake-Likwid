@@ -37,3 +37,9 @@ time action and action of form on rhs, where the problems is
     rhs = inner(f, v) * dx
 ```
 
+We need to double check what the AVX on COSMA the PyOP2 branch above is for avx512
+
+On Kokis machine I struggled, because if I run something like: likwid-perfctr -C 0 -g FLOPS_AVX -m testlkw.py 
+I get an error that says: `Warning: Counter PMC3 cannot be used if Restricted Transactional Memory feature is enabled and
+         bit 0 of register TSX_FORCE_ABORT is 0. As workaround write 0x1 to TSX_FORCE_ABORT:
+         sudo wrmsr 0x10f 0x1` and also `Marker API result file does not exist. This may happen if the application has not called LIKWID_MARKER_CLOSE.` even though I close the marker region.
