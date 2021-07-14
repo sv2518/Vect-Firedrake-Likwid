@@ -1,6 +1,8 @@
 # Testing likwid on Firedrake kernels which are vectorised
 
-Firedrake status needed. The *-kokismachine branches live on my forks
+The following Firedrake status is needed. The `*-kokismachine` branches live on my forks
+https://github.com/sv2518/firedrake and https://github.com/sv2518/PyOP2
+```
 ---------------------------------------------------------------------------
 |Package             |Branch                        |Revision  |Modified  |
 ---------------------------------------------------------------------------
@@ -18,3 +20,20 @@ Firedrake status needed. The *-kokismachine branches live on my forks
 |tsfc                |local-matfree                 |264a07c   |False     |
 |ufl                 |HEAD                          |e3b8752d  |False     |
 ---------------------------------------------------------------------------
+```
+
+The driver python file is test_vec_likwid.py. It's currently set up so that we
+time action and action of form on rhs, where the problems is 
+```
+    mesh = BoxMesh(n,n,n,1,1,1)
+    V = FunctionSpace(mesh, "DG", p)
+    u = TrialFunction(V)
+    v = TestFunction(V)
+    lmbda = Constant(value)
+    form = (dot(grad(v), grad(u)) + lmbda * v * u) * dx
+
+    f = Function(V)
+    f.assign(2.)
+    rhs = inner(f, v) * dx
+```
+
