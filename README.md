@@ -41,7 +41,7 @@ We need to double check what the AVX on COSMA the PyOP2 branch above is for avx5
 
 On Kokis machine I struggled, because if I run something like:
 ```
-likwid-perfctr -C 0 -g FLOPS_AVX -m testlkw.py
+likwid-perfctr -C 0 -g FLOPS_AVX -m test_vec_likwid.py 
 ```
 I get an error that says:
 ```
@@ -57,6 +57,11 @@ and also
 Marker API result file does not exist. This may happen if the application has not called LIKWID_MARKER_CLOSE.
 ``` 
 even though I close the marker region.
+
+[UPDATE: I didn't drive this correctly the correct comman is
+```
+likwid-perfctr -C 0 -g FLOPS_DP -m python3 test_vec_likwid.py 
+```
 
 So now I ran this without the python marker API
 I ran:
@@ -95,3 +100,48 @@ Group 1: FLOPS_DP
 +----------------------+------------+
 ```
 
+Using the marker API I now get
+```
+0 5464834565.0
+1 2787608765.0
+2 1631442372.0
+3 930.0
+4 458590.0
+5 586.0
+6 1884124.0
+--------------------------------------------------------------------------------
+Region run, Group 1: FLOPS_DP
++-------------------+------------+
+|    Region Info    | HWThread 0 |
++-------------------+------------+
+| RDTSC Runtime [s] |   0.850310 |
+|     call count    |          1 |
++-------------------+------------+
+
++------------------------------------------+---------+------------+
+|                   Event                  | Counter | HWThread 0 |
++------------------------------------------+---------+------------+
+|             INSTR_RETIRED_ANY            |  FIXC0  | 5464835000 |
+|           CPU_CLK_UNHALTED_CORE          |  FIXC1  | 2787609000 |
+|           CPU_CLK_UNHALTED_REF           |  FIXC2  | 1631442000 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  |        930 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |     458590 |
+| FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE |   PMC2  |        586 |
+| FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE |   PMC3  |    1884124 |
++------------------------------------------+---------+------------+
+
++----------------------+------------+
+|        Metric        | HWThread 0 |
++----------------------+------------+
+|  Runtime (RDTSC) [s] |     0.8503 |
+| Runtime unhalted [s] |     1.3306 |
+|      Clock [MHz]     |  3579.7658 |
+|          CPI         |     0.5101 |
+|     DP [MFLOP/s]     |    18.2707 |
+|   AVX DP [MFLOP/s]   |    17.7292 |
+|  AVX512 DP [MFLOP/s] |    17.7265 |
+|   Packed [MUOPS/s]   |     2.2176 |
+|   Scalar [MUOPS/s]   |     0.5393 |
+|  Vectorization ratio |    80.4375 |
++----------------------+------------+
+```
