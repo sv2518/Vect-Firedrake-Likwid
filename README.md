@@ -57,3 +57,41 @@ and also
 Marker API result file does not exist. This may happen if the application has not called LIKWID_MARKER_CLOSE.
 ``` 
 even though I close the marker region.
+
+So now I ran this without the python marker API
+I ran:
+```
+likwid-perfctr -C 0 -g FLOPS_DP python3 test_vec_likwid.py 
+```
+
+which gives me 
+```
+Group 1: FLOPS_DP
++------------------------------------------+---------+-------------+
+|                   Event                  | Counter |  HWThread 0 |
++------------------------------------------+---------+-------------+
+|             INSTR_RETIRED_ANY            |  FIXC0  | 17431825870 |
+|           CPU_CLK_UNHALTED_CORE          |  FIXC1  |  9854596779 |
+|           CPU_CLK_UNHALTED_REF           |  FIXC2  |  5695308696 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  |        1178 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |     1426957 |
+| FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE |   PMC2  |         586 |
+| FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE |   PMC3  |     1884124 |
++------------------------------------------+---------+-------------+
+
++----------------------+------------+
+|        Metric        | HWThread 0 |
++----------------------+------------+
+|  Runtime (RDTSC) [s] |     3.1993 |
+| Runtime unhalted [s] |     4.7037 |
+|      Clock [MHz]     |  3625.0723 |
+|          CPI         |     0.5653 |
+|     DP [MFLOP/s]     |     5.1589 |
+|   AVX DP [MFLOP/s]   |     4.7121 |
+|  AVX512 DP [MFLOP/s] |     4.7114 |
+|   Packed [MUOPS/s]   |     0.5895 |
+|   Scalar [MUOPS/s]   |     0.4460 |
+|  Vectorization ratio |    56.9265 |
++----------------------+------------+
+```
+
