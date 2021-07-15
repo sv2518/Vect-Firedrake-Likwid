@@ -49,7 +49,10 @@ Warning: Counter PMC3 cannot be used if Restricted Transactional Memory feature 
          bit 0 of register TSX_FORCE_ABORT is 0. As workaround write 0x1 to TSX_FORCE_ABORT:
          sudo wrmsr 0x10f 0x1`
 ```
-and the workaround does not work, and also
+and the workaround does not work,
+[UPDATE: sudo apt-get install msr-tools and then sudo wrmsr 0x10f 0x1 did the trick]
+
+and also
 ```
 Marker API result file does not exist. This may happen if the application has not called LIKWID_MARKER_CLOSE.
 ``` 
